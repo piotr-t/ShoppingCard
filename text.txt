@@ -1,0 +1,4 @@
+mongo db 
+C:\Program Files\MongoDB
+C:\Program Files\MongoDB\Server\4.0\bin\mongodb
+http://jsdn.pl/javascript-noob-mongodb/
