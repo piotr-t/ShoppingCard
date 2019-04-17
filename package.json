@@ -18,6 +18,10 @@
   "homepage": "https://github.com/piotr-t/ShoppingCard#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "mongodb": "^3.2.3"
+    "mongodb": "^3.2.3",
+    "mustache-express": "^1.2.8"
+  },
+  "devDependencies": {
+    "mustache": "^3.0.1"
   }
 }

@@ -1,11 +1,19 @@
 const express = require("express");
 const { MongoClient } = require('mongodb');
+const mustacheExpress = require('mustache-express');
+
+let haslo = "poiuy"
 
 let app = express();
 let us;
 const dbAddress = 'mongodb://127.0.0.1:27017/';
 const dbName = 'users';
 const mongoOptions = { useNewUrlParser: true };
+app.set('view engine', 'mustache');
+app.set('views', __dirname + '/views');
+
+
+app.engine('mustache', mustacheExpress());
 
 const mid = (req, res, next) => {
     console.log("us1:", us);
@@ -21,6 +29,13 @@ const mid = (req, res, next) => {
 }
 
 app.use(mid);
+
+app.get("/", (req, res) => {
+
+    res.render("index", {
+        tekst1: "mój jakiś tam tekst"
+    });
+})
 
 app.get('/:user', (req, res) => {
     res.send('hello world!');
