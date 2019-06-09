@@ -109,7 +109,7 @@ app.post('/User/:user/:password/Product/:productList', (req, res) => {
 
 //---------------delete all products------------------------------------
 app.delete('/User/:user/:password/Product/:productList', (req, res) => {
-    res.send("dziaął put")
+    res.send("produkt został usunięty")
 })
 
 app.listen(4500, () => console.log('server started'));
