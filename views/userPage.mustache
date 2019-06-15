@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Shopping Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+</head>
+<body >
+    <div>
+    <h1>{{tekst1}}</h1>
+    <form id="form"  >
+    <input id="pas" placeholder="new password" type="text">
+    </form>
+    <button >log out</button>
+    <button id="newPassword" onclick="changePassword()" style='background-color:red'>change password</button>
+    <button id="basket" onclick="basket()" style='background-color:red'>user basket</button>
+    </div>
+  <script  >
+
+//let userName = document.getElementById("user");
+let form = document.getElementById("form");
+let newPassword = document.getElementById("newPassword");
+
+let logIn = () => {
+    form.method="get"
+    form.action =loginString} 
+
+let changePassword=()=>{
+    form.method="put"
+    let loginString=location.href+"/"+newPassword.value
+    form.action =loginString
+}
+
+let basket=()=>{
+    
+    
+    let loginString=location.href+"/Product"
+    form.action =loginString
+    form.method="get"}
+
+</script> 
+
+</body>
+</html>

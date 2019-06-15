@@ -5,14 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Shopping Card</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   {{!  <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> }}
+  
 </head>
 <body>
     <div>
-    <p>{{tekst1}}</p>
-    <input type="text">
-    <button>submit</button>
+    <h1>{{tekst1}}</h1>
+    <form id="form"  >
+    <input id="user" placeholder="your username" type="text" >
+    <input id="password" placeholder="your password" type="text">
+    <button onclick="logIn()">login</button>
+    </form>  
     </div>
+  <script  >
+
+let userName = document.getElementById("user");
+let form = document.getElementById("form");
+let password = document.getElementById("password");
+let newPassword = document.getElementById("newPassword");
+
+let logIn = () => {
+    form.method="get"
+    let loginString=`/User/${userName.value}/${password.value}`
+    form.action =loginString} 
+</script> 
 
 </body>
 </html>

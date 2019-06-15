@@ -1,58 +1,46 @@
 const express = require("express");
 const mustacheExpress = require('mustache-express');
+const midwarePassword = require('./middlewear');
+
 let app = express();
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
-const { MongoClient } = require('mongodb');
-const dbAddress = 'mongodb://127.0.0.1:27017/';
-const dbName = 'users';
-const mongoOptions = { useNewUrlParser: true };
+
 let us;
-let result;
+
 app.engine('mustache', mustacheExpress());
 
-//============database==========================
+const dbInstance = require('./DBmongo');
 
-(async () => {
-
-    const client = await MongoClient.connect(dbAddress, mongoOptions);
-    db = client.db(dbName);
-})();
-
-const midwarePassword = (req, res, next) => {
-    us = req.params.user;
-    pas = req.params.password;
-    req.method !== "PUT" ?
-        (async () => {
-            let fi = await db.collection('users').findOne({ "name": us });
-            let fi1 = await db.collection('users').findOne({ "name": us, "password": pas });
-            !fi ? res.send("nie znaleziono użytkownika") : fi1 ? next() : res.send("nieprawidłowe hasło")
-        })() : next()
-
-}
-
+// middlewear
+app.use('/User/:user/:password', midwarePassword);
 
 
 
 app.get("/", (req, res) => {
 
     res.render("index", {
-        tekst1: "sklep z częściami samochodowymi"
+        tekst1: "sklep z częściami samochodowymi",
     });
 })
+
+
 //=========USER==============================
 
-app.use('/User/:user/:password', midwarePassword);
 
+//------- log in-----------------
 app.get('/User/:user/:password', (req, res) => {
-    console.log(req.params);
-
-    res.send(req.params.user);
+    res.render("userPage", {
+        tekst1: "sklep z częściami samochodowymi",
+    });
 
 });
 
+
+//-----------new user----------------
 app.put('/User/:user/:password', (req, res) => {
     (async () => {
+        const db = await dbInstance();
         let f1 = await db.collection('users').findOne({ "name": req.params.user });
         f1 ? res.send("użytkownik już istnieje w bazie") :
             await db.collection('users').insertOne({ "name": req.params.user, "password": req.params.password });
@@ -60,15 +48,22 @@ app.put('/User/:user/:password', (req, res) => {
     })();
 })
 
+
+//-------------change password---------------
 app.post('/User/:user/:password', (req, res) => {
     (async () => {
+        const db = await dbInstance();
         result = await db.collection('users').insertOne({ "name": us, "password": req.params.password });
     })();
     res.send("hasło zostało zmienione")
 })
 
-app.delete('/User/:user/:password', (req, res) => {
+
+
+//-------------delete user------------------------
+app.delete('/User/:user/:password/:newPassword', (req, res) => {
     (async () => {
+        const db = await dbInstance();
         result = await db.collection('users').deleteOne({ "name": req.params.user });
         res.send("użytkownik został usunięty")
     })();
@@ -79,37 +74,65 @@ app.delete('/User/:user/:password', (req, res) => {
 
 
 //-------------get product---------------------------------------------
-app.get('/User/:user/:password/Product/:productList', (req, res) => {
+app.get('/User/:user/:password/Product', (req, res) => {
 
     (async () => {
-        let f3 = await db.collection('users').findOne({ "name": req.params.user });
-        console.log(f3._id);
+        const db = await dbInstance();
+        let products = await db.collection('users').find().toArray();
+        res.render("productPage", {
+            tekst1: "sklep ",
+            products: products
 
-        res.send(f3.product);
+        });
     })();
 })
 
 app.put('/User/:user/:password/Product/:productList', (req, res) => {
 
     (async () => {
-
+        const db = await dbInstance();
         let f4 = await db.collection('users').findOne({ "name": req.params.user });
         f4 ? f4.password === req.params.password ? f4 = await db.collection('users')
             .update({ "name": req.params.user }, { $set: { "product": req.params.productList } }) :
             f4 = "nieprawidłowe hasło" : f4 = "użytkownik nieistnieje"
-
-
         res.send(f4)
     })();
 })
 
-app.post('/User/:user/:password/Product/:productList', (req, res) => {
-    res.send("dziaął put")
+//-----------add product-----------------------
+app.put('/User/:user/:password/Product/:productList', (req, res) => {
+
+    (async () => {
+        const db = await dbInstance();
+        const result = await db.collection('users').insertOne({
+            "product": req.params.productList,
+            "productID": req.params.password
+        });
+        res.render("productPage", {
+            tekst1: "sklep z częściami samochodowymi",
+        })
+    })();
 })
 
-//---------------delete all products------------------------------------
+
+//---------------delete  product------------------------------------
 app.delete('/User/:user/:password/Product/:productList', (req, res) => {
-    res.send("produkt został usunięty")
+
+    (async () => {
+        const db = await dbInstance();
+        await db.collection('users').deleteOne({ "_id": `ObjectID("${req.params.productList}")` })
+            .then(data => res.send("usunieto produkt")
+
+            );
+        //let products = await db.collection('users').find();
+
+        /*         res.render("productPage", {
+                    tekst1: "sklep z częściami samochodowymi",
+                    products: products
+        
+                }); */
+    })();
+
 })
 
 app.listen(4500, () => console.log('server started'));

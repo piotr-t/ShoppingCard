@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Shopping Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+</head>
+<body >
+    <div>
+    <h1>{{tekst1}}</h1>
+    <form id="form1"  >
+    <label>product name</label>
+    <input id="add" placeholder="add product" type="text" >
+    
+    <label>delete product</label>
+    <input id="deleteProduct" placeholder="delete product" type="text" >
+    
+    <button  onclick="deleteProduct1()">delete product</button>
+    <button type="submit" onclick="add()">add</button>
+    </form>  
+
+    <div>
+    {{#products}}
+    <div>
+    <p style ="color:blue">name</p>
+    {{name}}
+    <p style ="color:blue">id</p>
+    {{_id}}
+    </div><br><br>
+    {{/products}}
+    </div>
+    </div>
+  <script  >
+
+let userName = document.getElementById("user");
+let form1 = document.getElementById("form");
+let add = document.getElementById("add");
+let deleteProducts = document.getElementById("deleteProduct");
+
+let add = () => {
+    form.method="put"
+        let loginString=location.href+"/"+add.value
+    alert(form1.method)
+    form.action =loginString}
+let deleteProduct1 = () => {
+form.method="delete"
+    //location.href = location.href
+    let loginString=location.href+"/"+deleteProducts.value
+    alert(form1.method)
+    form1.action =loginString
+    
+    }
+</script> 
+
+</body>
+</html>
