@@ -120,17 +120,15 @@ app.delete('/User/:user/:password/Product/:productList', (req, res) => {
 
     (async () => {
         const db = await dbInstance();
-        await db.collection('users').deleteOne({ "_id": `ObjectID("${req.params.productList}")` })
-            .then(data => res.send("usunieto produkt")
+        await db.collection('users').deleteOne({ "id": req.params.productList })
 
-            );
-        //let products = await db.collection('users').find();
+        let products = await db.collection('users').find();
 
-        /*         res.render("productPage", {
-                    tekst1: "sklep z częściami samochodowymi",
-                    products: products
-        
-                }); */
+        res.render("productPage", {
+            tekst1: "sklep z częściami samochodowymi",
+            products: products
+
+        });
     })();
 
 })
